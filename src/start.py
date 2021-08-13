@@ -24,3 +24,43 @@ df.count()
 df = df.drop_duplicates()
 
 df.count()
+
+# Finding the null values.
+print(df.isnull().sum())
+
+df = df.dropna()
+df.count()
+
+# After dropping the values
+print(df.isnull().sum())
+
+sns.boxplot(x=df['Price'])
+
+sns.boxplot(x=df['HP'])
+
+sns.boxplot(x=df['Cylinders'])
+
+Q1 = df.quantile(0.25)
+Q3 = df.quantile(0.75)
+IQR = Q3 - Q1
+print(IQR)
+
+df = df[~((df < (Q1 - 1.5 * IQR)) |(df > (Q3 + 1.5 * IQR))).any(axis=1)]
+df.shape
+
+df.Make.value_counts().nlargest(40).plot(kind='bar', figsize=(10,5))
+plt.title('Number of cars by make')
+plt.ylabel('Number of cars')
+plt.xlabel('Make')
+
+# Finding the relations between the variables.
+plt.figure(figsize=(20,10))
+c= df.corr()
+sns.heatmap(c,cmap='BrBG',annot=True)
+
+# Plotting a scatter plot
+fig, ax = plt.subplots(figsize=(10,6))
+ax.scatter(df['HP'], df['Price'])
+ax.set_xlabel('HP')
+ax.set_ylabel('Price')
+plt.show()
